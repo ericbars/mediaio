@@ -4828,7 +4828,7 @@ static void ffmpeg_log_callback(void *ptr, int level, const char *fmt, va_list v
     __android_log_vprint(ANDROID_LOG_DEBUG, "ffmpeg", fmt, vl);
 }
 
-int load_ffmpeg(int argc, char **argv)
+int load_transcode(int argc, char **argv)
 {
     int i, ret;
     int64_t ti;

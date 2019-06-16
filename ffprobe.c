@@ -3725,7 +3725,7 @@ static void ffmpeg_log_callback(void *ptr, int level, const char *fmt, va_list v
     __android_log_vprint(ANDROID_LOG_DEBUG, "ffmpeg", fmt, vl);
 }
 
-int load_ffprobe(int argc, char **argv) {
+int load_probe(int argc, char **argv) {
     const Writer *w;
     WriterContext *wctx;
     char *buf;

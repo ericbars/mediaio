@@ -670,11 +670,11 @@ int hwaccel_decode_init(AVCodecContext *avctx);
 
 
 // mediaio add
-int load_ffmpeg(int argc, char **argv);
+int load_transcode(int argc, char **argv);
 typedef void progressCallback(int progress); //0 - 100
 void registerCallback(progressCallback *i);
 
-int load_ffprobe(int argc, char **argv);
+int load_probe(int argc, char **argv);
 typedef void probeCallback(int key, const char* value); //0 - 100
 void registerProbeCallback(probeCallback *i);
 

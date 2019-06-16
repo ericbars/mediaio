@@ -1,4 +1,4 @@
-#include "cn_mediaio_mediaio_ffmpeg_Transcode.h"
+#include "cn_mediaio_mediaio_transcode_Transcode.h"
 #include <android/log.h>
 #include <pthread.h>
 #include "ffmpeg.h"
@@ -16,16 +16,16 @@ static jint mArgc;
 static const char *mArgvs[256];
 
 
-void *do_ffmpeg(void *argv) {
-    LOGV("thread %lld, load_ffmpeg", pthread_self());
-    load_ffmpeg(mArgc, (char **) mArgvs);
+void *do_transcode(void *argv) {
+    LOGV("thread %lld, load_transcode", pthread_self());
+    load_transcode(mArgc, (char **) mArgvs);
     return nullptr;
 }
 
 
-void *do_ffprobe(void *argv) {
-    LOGV("thread %lld, load_ffprobe", pthread_self());
-    load_ffprobe(mArgc, (char **) mArgvs);
+void *do_probe(void *argv) {
+    LOGV("thread %lld, load_probe", pthread_self());
+    load_probe(mArgc, (char **) mArgvs);
     return nullptr;
 }
 
@@ -68,7 +68,7 @@ jint get_jni_global_parameter(JNIEnv *env, jobject obj, jobjectArray argv, jint 
 
     jboolean isCopy;
 
-    jclass localClass = env->FindClass("cn/mediaio/mediaio/ffmpeg/Transcode");
+    jclass localClass = env->FindClass("cn/mediaio/mediaio/transcode/Transcode");
     if (NULL == localClass) {
         LOGV("FindClass Transcode failure.");
         return -1;
@@ -102,7 +102,7 @@ void start_probe_thread(JNIEnv *env, jobject obj, jobjectArray argv, jint argc) 
 
     registerProbeCallback(probeCallbackAndroid);
 
-    pthread_create(&worker_thread, NULL, do_ffprobe, NULL);
+    pthread_create(&worker_thread, NULL, do_probe, NULL);
     pthread_detach(worker_thread);
 
     return;
@@ -115,7 +115,7 @@ void start_worker_thread(JNIEnv *env, jobject obj, jobjectArray argv, jint argc)
 
     registerCallback(progressCallbackAndroid);
 
-    pthread_create(&worker_thread, NULL, do_ffmpeg, NULL);
+    pthread_create(&worker_thread, NULL, do_transcode, NULL);
     pthread_detach(worker_thread);
 
     return;
@@ -123,11 +123,11 @@ void start_worker_thread(JNIEnv *env, jobject obj, jobjectArray argv, jint argc)
 
 
 /*
- * Class:     cn_mediaio_mediaio_ffmpeg_Transcode
+ * Class:     cn_mediaio_mediaio_transcode_Transcode
  * Method:    doProbe
  * Signature: ([Ljava/lang/String;I)I
  */
-JNIEXPORT jint JNICALL Java_cn_mediaio_mediaio_ffmpeg_Transcode_doProbe
+JNIEXPORT jint JNICALL Java_cn_mediaio_mediaio_transcode_Transcode_doProbe
         (JNIEnv *env, jobject obj, jobjectArray argv, jint argc) {
     LOGV("native : do probe");
     start_probe_thread(env, obj, argv, argc);
@@ -140,7 +140,7 @@ JNIEXPORT jint JNICALL Java_cn_mediaio_mediaio_ffmpeg_Transcode_doProbe
  * Method:    doTranscode
  * Signature: ([Ljava/lang/String;I)I
  */
-JNIEXPORT jint JNICALL Java_cn_mediaio_mediaio_ffmpeg_Transcode_doTranscode
+JNIEXPORT jint JNICALL Java_cn_mediaio_mediaio_transcode_Transcode_doTranscode
         (JNIEnv *env, jobject obj, jobjectArray argv, jint argc) {
 
     LOGV("native : do transcode");
